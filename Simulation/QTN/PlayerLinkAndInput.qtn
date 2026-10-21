@@ -1,0 +1,34 @@
+component PlayerLink 
+{
+    PlayerRef Player;   // PlayerRef.None for bots (see Bot.qtn)
+    Int32 Kills;
+    Int32 Deaths;
+    Int32 Parries;        // bullets absorbed by a successful parry
+    FP DamageDealt;       // damage done to other participants (not self-damage or zone)
+    Int32 Streak;         // kills since last death
+    Int32 BestStreak;
+    Boolean IsDead;
+    FP RespawnTimer;
+    FPVector2 DeathPosition;
+    FPVector2 RespawnPosition;
+}
+
+input
+{
+    FPVector2 Direction;
+    FPVector2 MousePosition;
+    button Fire;
+    button Parry;
+}
+
+// Stats kept for a player who disconnects mid-session, so they get them back if they rejoin with their
+// reconnect token (Photon PlayerTTL). Indexed by PlayerRef in GameManager.ReturnSlots.
+struct SavedPlayerStats
+{
+    Boolean HasValue;
+    Int32 Kills;
+    Int32 Deaths;
+    Int32 Parries;
+    FP DamageDealt;
+    Int32 BestStreak;
+}

@@ -1,0 +1,32 @@
+singleton component GameManager
+{
+	GameState CurrentGameState;
+    FP TimeToWaitPlayers;
+    AssetRef<GameManagerConfig> GameManagerConfig;
+    FP MatchTimeRemaining;
+    FP NextPickupSpawnTime;
+    Int64 RematchVotes;                       // bit per PlayerRef: voted "Play again" on the game-over screen
+    array<SavedPlayerStats>[16] ReturnSlots;  // stats of disconnected players, restored on rejoin
+}
+
+enum GameState
+{
+	WaitingForPlayers,
+	Playing,
+	GameOver
+}
+
+event GameplayStarted 
+{
+
+}
+
+event GameOver
+{
+	EntityRef Winner;
+}
+
+event RematchStarted
+{
+
+}

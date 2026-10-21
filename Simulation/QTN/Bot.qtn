@@ -1,0 +1,43 @@
+// AI-controlled participant. A bot entity is a normal player avatar (PlayerLink, Damageable, Weapon, Parry, KCC)
+// whose PlayerLink.Player is PlayerRef.None. Character systems read Bot.Input instead of frame.GetPlayerInput
+// (see InputResolver). BotAISystem runs the HFSM (or, without one, BotFallbackBrain) and writes Input every tick.
+component Bot
+{
+    Input Input;
+    Int32 BotNumber;
+    AssetRef<BotDifficulty> Difficulty;
+    AssetRef<BotArchetype> Archetype;
+    BotBrainState BrainState;
+    EntityRef Target;
+    FP RetargetTimer;
+    FP StrafeTimer;
+    Int32 StrafeSign;
+    FPVector2 AimOffset;
+    FP AimTimer;
+    FP ParryDecisionTimer;
+    FP FireDelayTimer;
+    Boolean WantsFire;
+    Boolean WantsParry;
+
+    // Level enemies: patrol around PatrolCenter (their spawn point) until a player comes within the archetype's
+    // DetectionRange (or shoots them), then stay locked on (Aggro) until that player dies or the bot dies.
+    Boolean Aggro;
+    FPVector2 PatrolCenter;
+    FPVector2 PatrolPoint;
+    FP PatrolWait;
+    FP PatrolMoveTime;
+
+    // Pathfinding around walls (BotNavigation): current waypoint toward NavGoal, re-planned every NavTimer seconds
+    FPVector2 NavWaypoint;
+    FPVector2 NavGoal;
+    FP NavTimer;
+    Boolean HasNavWaypoint;
+}
+
+// State of the code fallback brain (used only when GameManagerConfig.BotHFSM is empty)
+enum BotBrainState
+{
+    Fight,
+    ReturnToZone,
+    SeekHealth
+}
